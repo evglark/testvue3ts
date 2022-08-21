@@ -1,16 +1,16 @@
 <script lang="ts">
 import Accordion from '@/components/Accordion/accordion.vue';
 export default {
-    components: {
-        Accordion,
-    },
+    components: { Accordion },
     data() {
         return {
             groupsOfProducts: [],
+            timer: null,
         }
     },
     methods: {
-        getData() {
+        getData(): void {
+            console.log(0);
             Promise.all([
                 fetch('./src/data/data.json').then(response => response.json()),
                 fetch('./src/data/names.json').then(response => response.json()),
@@ -31,6 +31,21 @@ export default {
                 );
             });
         },
+        clickHandler(props: any): void {
+            console.log(JSON.parse(JSON.stringify(props)));
+        },
+        startTimer(func: () => any, timer: number): any {
+            this.timer = setInterval(() => {
+                func();
+            }, timer);
+        },
+    },
+    mounted() {
+        this.getData();
+        this.startTimer(this.getData, 15000_0);
+    },
+    beforeDestroy() {
+        clearInterval(this.timer);
     }
 }
 </script>
@@ -42,6 +57,7 @@ export default {
             v-for="(group) in this.groupsOfProducts"
             :title="group[0].type"
             :products="group"
+            :onClick="this.clickHandler"
         />
     </main>
 </template>

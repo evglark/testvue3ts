@@ -4,6 +4,7 @@ export default {
     props: {
         title: String,
         products: Array,
+        onClick: Function,
     }
 }
 </script>
@@ -12,8 +13,9 @@ export default {
     <div class="accordion">
         <div class="header">{{ title }}</div>
         <div class="body">
-            <div v-for="(product) in products" class="product-card">
-                <div class="name">{{ product.name }}</div>
+            <div v-for="(product) in products" class="product-card" @click="onClick(product)">
+                {{ product.selectd ? 1 : 0 }}
+                <div class="name">{{ product.name }} ({{ product.quantity }})</div>
                 <div class="price">{{ product.price }}</div>
             </div>
         </div>
@@ -45,6 +47,10 @@ export default {
     flex-basis: calc(50%);
     border-bottom: 1px solid;
     border-right: 1px solid;
+}
+
+.product-card:hover {
+    cursor: pointer;
 }
 
 .name {
